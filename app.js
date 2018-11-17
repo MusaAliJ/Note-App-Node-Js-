@@ -21,7 +21,9 @@ else if(command === "read"){
     note.getNote();
 }
 else if(command === "remove"){
-    note.removeNote();
+    var removestat = note.removeNote(argv.title);
+    var message = removestat ? "Note is Removed" : "Note is not removed"
+    console.log(message);
 }
 else{
     console.log("Sorry, Command is not reconized");

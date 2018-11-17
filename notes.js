@@ -24,7 +24,7 @@ var saveNote = (notes) =>{
 
 
 var addNotes = (title, body) =>{
-    var notes =[];
+    var notes =fetchNote();
     var note ={
         title,
         body
@@ -49,9 +49,14 @@ var getNote = () =>{
     console.log("Getting Note");
 }
 
-var removeNote = () =>{
-    console.log("Removing Note");
+var removeNote = (title) =>{
+
+    var notes = fetchNote();
+    var remnote = notes.filter((note) => note.title !== title );
+    saveNote(remnote);
+    return notes.length !== remnote.length; 
 }
+
 module.exports={
     addNotes,
     getList,
