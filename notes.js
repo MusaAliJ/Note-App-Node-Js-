@@ -1,66 +1,63 @@
-console.log("Starting note.js");
+console.log('Starting notes.js');
 
-var fs = require("fs");
+const fs = require('fs');
 
-var fetchNote =() =>{
-    try{
-        notesString = fs.readFileSync("notes-state.json");
-    notes = JSON.parse(notesString);
-    return notes;
-    }
-catch(e){
-   console.log ("cvxvc")
+var fetchNotes = () => {
+  try {
+    var notesString = fs.readFileSync('notes-data.json');
+    return JSON.parse(notesString);
+  } catch (e) {
     return [];
-}
-}
+  }
+};
 
-var saveNote = (notes) =>{
-    fs.writeFileSync("notes-state.json", JSON.stringify(notes)); 
-    console.log("Note is uploaded");
-}
+var saveNotes = (notes) => {
+  fs.writeFileSync('notes-data.json', JSON.stringify(notes));
+};
 
+var addNote = (title, body) => {
+  var notes = fetchNotes();
+  var note = {
+    title,
+    body
+  };
+  var duplicateNotes = notes.filter((note) => note.title === title);
 
+  if (duplicateNotes.length === 0) {
+    notes.push(note);
+    saveNotes(notes);
+    return note;
+  }
+};
 
+var getAll = () => {
+  console.log('Getting all notes');
+};
 
+var getNote = (title) => {
+  var notes = fetchNotes();
+  var filteredNotes = notes.filter((note) => note.title === title);
+  return filteredNotes[0];
+};
 
-var addNotes = (title, body) =>{
-    var notes =fetchNote();
-    var note ={
-        title,
-        body
-    };
+var removeNote = (title) => {
+  var notes = fetchNotes();
+  var filteredNotes = notes.filter((note) => note.title !== title);
+  saveNotes(filteredNotes);
 
- 
-    var duplicateNotes = notes.filter((note) => note.title === title)
-    if(duplicateNotes.length === 0){
-        notes.push(note);
-        saveNote(notes)
-    }
-    
-    else{
-        console.log("This note is already there")
-    }
-}
+  return notes.length !== filteredNotes.length;
+};
 
-var getList = () =>{
-    console.log("Getting List");
-}
-var getNote = () =>{
-    console.log("Getting Note");
-}
+var logNote = (note) => {
+  console.log('--');
+  console.log(`Title: ${note.title}`);
+  console.log(`Body: ${note.body}`);
+};
 
-var removeNote = (title) =>{
-
-    var notes = fetchNote();
-    var remnote = notes.filter((note) => note.title !== title );
-    saveNote(remnote);
-    return notes.length !== remnote.length; 
-}
-
-module.exports={
-    addNotes,
-    getList,
-    getNote,
-    removeNote
-}
-
+module.exports = {
+  addNote,
+  getAll,
+  getNote,
+  removeNote,
+  logNote
+};
